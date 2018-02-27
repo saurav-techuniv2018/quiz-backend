@@ -1,6 +1,6 @@
 const hapi = require('hapi');
 
-const allRoutes = [];
+const allRoutes = require('./routes');
 
 const server = new hapi.Server();
 

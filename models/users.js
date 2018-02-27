@@ -3,8 +3,9 @@ module.exports = (sequelize, DataTypes) => {
     username: DataTypes.STRING,
     score: DataTypes.INTEGER,
   }, {});
-  users.associate = function associate() {
-    // associations can be defined here
+  users.associate = (models) => {
+    models.users.hasMany(models.answers);
+    models.answers.belongsTo(models.users);
   };
   return users;
 };

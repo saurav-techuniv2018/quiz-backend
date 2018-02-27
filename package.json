@@ -1,0 +1,22 @@
+{
+  "name": "quizzy-backend",
+  "version": "1.0.0",
+  "description": "Hapi.js server for Quizzy Quiz App - Exercise 3",
+  "main": "src/server.js",
+  "repository": "git@github.com:saurav-techuniv2018/quiz-backend.git",
+  "author": "Sahu, S <sauravsahu.12@live.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "dependencies": {
+    "hapi": "16.6.2",
+    "pg": "^7.4.1",
+    "sequelize": "^4.32.6"
+  },
+  "devDependencies": {
+    "eslint": "^4.18.1",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.9.0"
+  }
+}

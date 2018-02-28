@@ -77,4 +77,48 @@ const answer = userChoice => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
-module.exports = { login, answer };
+const score = userName => new Promise((resolve, reject) => {
+  const userPromise = models.users.find({
+    where: {
+      userName,
+    },
+  });
+
+  const questionsPromise = models.questions.findAll();
+
+  Promise.all([userPromise, questionsPromise])
+    .then(([user, questions]) => {
+      if (user === null) {
+        return reject({
+          error: 'User not found',
+          statusCode: 404,
+          message: 'userName provided is invalid',
+        });
+      }
+
+      return Promise.all([models.answers.findAll({
+        where: {
+          userId: user.id,
+        },
+        include: [{
+          model: models.questions,
+          as: 'question',
+        }],
+      }), Promise.resolve(questions)]);
+    })
+    .then(([userAnswers, questions]) => {
+      if (userAnswers.length !== questions.length) {
+        reject({
+          error: 'Quiz is incomplete',
+          statusCode: 400,
+          message: 'Complete the quiz and repeat the request',
+        });
+      }
+
+      const correctAnswers = userAnswers.filter(a => a.selectedAnswer === a.question.correctAnswer);
+
+      resolve(correctAnswers.length);
+    });
+});
+
+module.exports = { login, answer, score };

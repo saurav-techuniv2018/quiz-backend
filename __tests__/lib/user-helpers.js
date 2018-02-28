@@ -10,19 +10,16 @@ const clean = () => models.users.destroy({
     truncate: true,
     restartIdentity: true,
     cascade: true,
-
   }))
   .then(() => models.questions.destroy({
     truncate: true,
     restartIdentity: true,
     cascade: true,
-
   }))
   .then(() => models.answers.destroy({
     truncate: true,
     restartIdentity: true,
     cascade: true,
-
   }));
 
 beforeEach((done) => {
@@ -48,41 +45,59 @@ beforeEach((done) => {
 afterEach(clean);
 
 describe('userHelpers', () => {
-  describe('should return error object', () => {
-    test('when questionId is invalid', ((done) => {
-      userHelpers.answer({
-        questionId: -1,
-        userId: 1,
-        selectedAnswer: 'New Delhi',
-      })
-        .then(() => {
+  describe('answer', () => {
+    describe('should return error object', () => {
+      test('when questionId is invalid', ((done) => {
+        userHelpers.answer({
+          questionId: -1,
+          userId: 1,
+          selectedAnswer: 'New Delhi',
         })
-        .catch((e) => {
-          expect(e).toEqual({
-            error: 'Question not found',
-            message: 'Question id provided is invalid',
-            statusCode: 404,
+          .then(() => {
+          })
+          .catch((e) => {
+            expect(e).toEqual({
+              error: 'Question not found',
+              message: 'Question id provided is invalid',
+              statusCode: 404,
+            });
+            done();
           });
-          done();
-        });
-    }));
+      }));
 
-    test('when userName is invalid', ((done) => {
-      userHelpers.answer({
-        questionId: 1,
-        userId: -1,
-        selectedAnswer: 'New Delhi',
-      })
-        .then(() => {
+      test('when userName is invalid', ((done) => {
+        userHelpers.answer({
+          questionId: 1,
+          userId: -1,
+          selectedAnswer: 'New Delhi',
         })
-        .catch((e) => {
-          expect(e).toEqual({
-            error: 'User not found',
-            message: 'userName provided is invalid',
-            statusCode: 404,
+          .then(() => {
+          })
+          .catch((e) => {
+            expect(e).toEqual({
+              error: 'User not found',
+              message: 'userName provided is invalid',
+              statusCode: 404,
+            });
+            done();
           });
-          done();
-        });
-    }));
+      }));
+    });
+  });
+
+  describe('score', () => {
+    test('should reject with error due to incomplete quiz ', () =>
+      userHelpers.score({
+        userName: 'first',
+      })
+        .then(() => { })
+        .catch((e) => {
+          expect(e)
+            .toEqual({
+              error: 'Quiz is incomplete',
+              statusCode: 400,
+              message: 'Complete the quiz and repeat the request',
+            });
+        }));
   });
 });

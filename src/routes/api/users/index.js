@@ -1,3 +1,4 @@
 const login = require('./login');
+const score = require('./score');
 
-module.exports = [...login];
+module.exports = [...login, ...score];

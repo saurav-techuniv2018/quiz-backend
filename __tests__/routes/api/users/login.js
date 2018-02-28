@@ -31,6 +31,12 @@ describe('route` /api/users/login', () => {
       .then((response) => { expect(response.body.statusCode).toBe(200); })
       .catch((e) => { throw e; }));
 
+  test('should accept POST request', () =>
+    supertest(server.listener)
+      .get(route)
+      .then((response) => { expect(response.body.statusCode).toBe(404); })
+      .catch((e) => { throw e; }));
+
   test('should add new entry is user is not present', (done) => {
     userHelpers.login({ userName: 'second' })
       .then(() => models.users.count())

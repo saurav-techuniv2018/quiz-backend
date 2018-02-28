@@ -11,7 +11,7 @@ const login = user => new Promise((resolve, reject) => {
               {
                 question: q.question,
                 correctAnswer: q.correctAnswer,
-                options: q.options,
+                options: q.options.map(option => ({ option })),
               },
               {
                 include: [{

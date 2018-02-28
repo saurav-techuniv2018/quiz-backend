@@ -1,1 +1,3 @@
-module.exports = [];
+const api = require('./api');
+
+module.exports = [...api];

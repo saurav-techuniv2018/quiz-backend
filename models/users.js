@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
   const users = sequelize.define('users', {
-    username: DataTypes.STRING,
+    userName: DataTypes.STRING,
     score: DataTypes.INTEGER,
   }, {});
   users.associate = (models) => {

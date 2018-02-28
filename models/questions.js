@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
     correctAnswer: DataTypes.STRING,
   }, {});
   questions.associate = (models) => {
-    models.questions.hasMany(models.options);
+    questions.options = models.questions.hasMany(models.options, { as: 'options' });
   };
   return questions;
 };

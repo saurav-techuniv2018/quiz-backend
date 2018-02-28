@@ -70,7 +70,7 @@ const answer = userChoice => new Promise((resolve, reject) => {
         },
       });
     })
-    .then(answerRow => answerRow.updateAttributes({
+    .then(([answerRow]) => answerRow.updateAttributes({
       selectedAnswer: userChoice.selectedAnswer,
     }))
     .then(resolve)

@@ -4,7 +4,7 @@ const server = require('../../../src/server');
 const route = '/api/questions';
 
 describe(`route GET ${route}`, () => {
-  test('should return a Promise', () =>
+  test('should return 200 statusCode', () =>
     supertest(server.listener)
       .get(route)
       .then((response) => {

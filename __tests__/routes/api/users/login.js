@@ -6,24 +6,34 @@ const userHelpers = require('../../../../src/lib/user-helpers');
 
 const route = '/api/users/login';
 
-beforeEach(done =>
-  models.users.destroy({
-    truncate: true,
-    restartIdentity: true,
-  })
-    .then(() => {
-      models.users.create({
-        userName: 'first',
-      });
-      done();
-    }));
-
-afterEach(() => models.users.destroy({
+const clean = () => models.users.destroy({
   truncate: true,
   restartIdentity: true,
-}));
+  cascade: true,
+})
+  .then(() => models.options.destroy({
+    truncate: true,
+    restartIdentity: true,
+    cascade: true,
 
-describe('route` /api/users/login', () => {
+  }))
+  .then(() => models.questions.destroy({
+    truncate: true,
+    restartIdentity: true,
+    cascade: true,
+
+  }));
+
+beforeEach((done) => {
+  models.users.create({
+    userName: 'first',
+  })
+    .then(() => { done(); });
+});
+
+afterEach(clean);
+
+describe(`route ${route}`, () => {
   test('should return 200 statusCode', () =>
     supertest(server.listener)
       .post(route)

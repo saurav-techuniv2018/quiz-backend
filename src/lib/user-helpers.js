@@ -33,4 +33,48 @@ const login = user => new Promise((resolve, reject) => {
     .catch(reject);
 });
 
-module.exports = { login };
+const answer = userChoice => new Promise((resolve, reject) => {
+  const questionPromise = models.questions.find({
+    where: {
+      id: userChoice.questionId,
+    },
+  });
+  const userPromise = models.users.find({
+    where: {
+      userName: userChoice.userName,
+    },
+  });
+
+  Promise.all([questionPromise, userPromise])
+    .then(([question, user]) => {
+      if (question === null) {
+        reject({
+          error: 'Question not found',
+          statusCode: 404,
+          message: 'Question id provided is invalid',
+        });
+      }
+
+      if (user === null) {
+        reject({
+          error: 'User not found',
+          statusCode: 404,
+          message: 'userName provided is invalid',
+        });
+      }
+
+      return models.answers.findOrCreate({
+        where: {
+          questionId: question.id,
+          userId: user.id,
+        },
+      });
+    })
+    .then(answerRow => answerRow.updateAttributes({
+      selectedAnswer: userChoice.selectedAnswer,
+    }))
+    .then(resolve)
+    .catch(reject);
+});
+
+module.exports = { login, answer };

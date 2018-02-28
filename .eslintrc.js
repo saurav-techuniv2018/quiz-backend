@@ -4,4 +4,7 @@ module.exports = {
     "browser": false,
     "jest": true,
   },
+  "rules": {
+    "prefer-promise-reject-errors": 0,
+  },
 };

@@ -96,17 +96,20 @@ const score = userName => new Promise((resolve, reject) => {
         });
       }
 
-      return Promise.all([models.answers.findAll({
-        where: {
-          userId: user.id,
-        },
-        include: [{
-          model: models.questions,
-          as: 'question',
-        }],
-      }), Promise.resolve(questions)]);
+      return Promise.all([
+        user,
+        models.answers.findAll({
+          where: {
+            userId: user.id,
+          },
+          include: [{
+            model: models.questions,
+            as: 'question',
+          }],
+        }),
+        Promise.resolve(questions)]);
     })
-    .then(([userAnswers, questions]) => {
+    .then(([user, userAnswers, questions]) => {
       if (userAnswers.length !== questions.length) {
         reject({
           error: 'Quiz is incomplete',
@@ -117,7 +120,13 @@ const score = userName => new Promise((resolve, reject) => {
 
       const correctAnswers = userAnswers.filter(a => a.selectedAnswer === a.question.correctAnswer);
 
-      resolve(correctAnswers.length);
+      return Promise.all([{
+        score: correctAnswers.length,
+        total: questions.length,
+      }, user.updateAttributes({ score: correctAnswers.length })]);
+    })
+    .then(([userScore]) => {
+      resolve(userScore);
     });
 });
 

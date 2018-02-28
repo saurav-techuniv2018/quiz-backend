@@ -6,9 +6,12 @@ module.exports = [
     method: 'POST',
     handler: (request, response) => {
       userHelpers.score(request.payload.userName)
-        .then(score => response({
+        .then(result => response({
           statusCode: 200,
-          score,
+          data: {
+            score: result.score,
+            total: result.total,
+          },
         }))
         .catch(response);
     },

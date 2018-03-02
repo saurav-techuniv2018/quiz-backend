@@ -12,6 +12,7 @@ module.exports = [
             $ne: null,
           },
         },
+        order: [['score', 'DESC']],
         attributes: ['userName', 'score'],
       })
         .then(users => response({
